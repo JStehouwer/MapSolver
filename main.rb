@@ -18,14 +18,15 @@ class Main
 
   def self.game_loop
     while(true)
-      if @goal_location == @human.get_my_location
-        puts "The player won.\n#{@human.get_steps} steps were required."
+      if @goal_location == @player.get_my_location
+        puts "The player won.\n#{@player.get_steps} steps were required."
         exit
       end
-      @map.render_revealed(revealed: @human.get_revealed)
-      move = @human.ask_for_move(map: @map.multiply_each(@map, @human.get_revealed))
+      @map.render_revealed(revealed: @player.get_revealed)
+      @player.render_before_move
+      move = @player.ask_for_move(map: @map.multiply_each(@map, @player.get_revealed))
       if move != -1
-        Main.move_player(@map, @human, move)
+        Main.move_player(@map, @player, move)
       else
         puts "Quitting the game"
         exit
@@ -62,15 +63,36 @@ class Main
     # Render the map if in debug mode
     @map.render_all if Settings.debug_mode
 
-    # Create the human player
-    #@human = HumanPlayer.new(goal_location: @goal_location,
-    #@human = AILeftPlayer.new(goal_location: @goal_location,
-    #@human = AIUpPlayer.new(goal_location: @goal_location,
-    #@human = AIDiagPlayer.new(goal_location: @goal_location,
-    @human = AIDistPlayer.new(goal_location: @goal_location,
-                            my_location: @player_location,
-                            map: @map,
-                            wall_break: 1)
+    # Create the player
+    @player = nil
+    case Settings.get_player_file
+    when "human"
+      @player = HumanPlayer.new(goal_location: @goal_location,
+                                my_location: @player_location,
+                                map: @map,
+                                wall_break: 1)
+    when "ai_up"
+      @player = AIUpPlayer.new(goal_location: @goal_location,
+                               my_location: @player_location,
+                               map: @map,
+                               wall_break: 1)
+    when "ai_left"
+      @player = AILeftPlayer.new(goal_location: @goal_location,
+                                 my_location: @player_location,
+                                 map: @map,
+                                 wall_break: 1)
+    when "ai_diag"
+      @player = AIDiagPlayer.new(goal_location: @goal_location,
+                                 my_location: @player_location,
+                                 map: @map,
+                                 wall_break: 1)
+    when "ai_dist"
+      @player = AIDistPlayer.new(goal_location: @goal_location,
+                                 my_location: @player_location,
+                                 map: @map,
+                                 wall_break: 1)
+    end
+
     # Begin the game
     puts "Hit <Enter> to begin the game..."
     gets
@@ -82,4 +104,3 @@ class Main
 
   self.run
 end
-

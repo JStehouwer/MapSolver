@@ -7,6 +7,8 @@ class Settings
     @@horizontal_size = 5
     @@vertical_size = 5
     @@random = Random.new
+    @@player_file = ""
+    @@player_name = ""
     @@test_mode = 0
   end
   
@@ -16,6 +18,7 @@ class Settings
   end
 
   def parse(arguments)
+    players = ["human", "ai_up", "ai_left", "ai_diag", "ai_dist"]
     set_defaults
     (0..arguments.length).each do |arg|
       case arguments.at(arg)
@@ -50,6 +53,14 @@ class Settings
         else
           puts "Invalid vertical size: #{arguments.at(arg+1)}"
         end
+      when "-p"
+        if arguments.at(arg+1) and players.include?(arguments.at(arg+1))
+          @@player_file = arguments.at(arg+1)
+        end
+      when "-pn"
+        if arguments.at(arg+1)
+          @@player_name = arguments.at(arg+1)
+        end
       when "-test"
         @@test_mode = 1
       end
@@ -78,6 +89,14 @@ class Settings
 
   def self.get_random
     @@random
+  end
+
+  def self.get_player_file
+    @@player_file
+  end
+
+  def self.get_player_name
+    @@player_name
   end
 
   def self.test_mode

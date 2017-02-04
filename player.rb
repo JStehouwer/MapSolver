@@ -57,6 +57,14 @@ class Player
     @last_move = movement
   end
 
+  def render_before_move
+    if @wall_break == 1
+      puts "Player has 1 wall break"
+    else
+      puts "Player has #{@wall_break} wall breaks"
+    end
+  end
+
   def get_revealed
     return @revealed
   end
