@@ -6,6 +6,7 @@ require_relative 'ai_left_player'
 require_relative 'ai_up_player'
 require_relative 'ai_diag_player'
 require_relative 'ai_dist_player'
+require_relative 'other_player'
 
 class Main
   def self.move_player(map, player, movement)
@@ -91,6 +92,12 @@ class Main
                                  my_location: @player_location,
                                  map: @map,
                                  wall_break: 1)
+    when "other"
+      @player = OtherPlayer.new(goal_location: @goal_location,
+                                 my_location: @player_location,
+                                 map: @map,
+                                 wall_break: 1,
+                                 executable: Settings.get_player_executable)
     end
 
     # Begin the game

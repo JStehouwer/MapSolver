@@ -18,7 +18,7 @@ class Player
     @revealed.see_surrounding(location: @my_location)
     @revealed.reveal_location(loc: goal_location)
     @revealed.reveal_location(loc: my_location)
-    @map.render_revealed(revealed: @revealed)
+    @map.render_revealed(revealed: @revealed) if Settings.debug_mode
   end
 
   # Checks if the move is valid

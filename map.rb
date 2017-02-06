@@ -29,23 +29,21 @@ class Map
 
   # Renders the given map to the console
   def render(map, reveal: false)
-    #unless Settings.test_mode
-      output = "--------" * map.get_vertical_size() + "-\n"
-      map.get_map().each do |column|
-        output += "|  " + column.join("\t|  ") + "\t|\n"
-        output += "--------" * map.get_vertical_size() + "-\n"
-      end
+    output = "--------" * map.get_vertical_size() + "-\n"
+    map.get_map().each do |column|
+      output += "|  " + column.join("\t|  ") + "\t|\n"
+      output += "--------" * map.get_vertical_size() + "-\n"
+    end
 
-      unless reveal
-        # Convert numeric data to visually better map
-        output = output.gsub("0", "XXX") # Convert unknown to ?
-        output = output.gsub("1", " ") # Convert 1 to _
-        output = output.gsub("2", "W") # Convert 2 to W
-        output = output.gsub("3", "F") # Convert 3 to F
-        output = output.gsub("4", '(")') # Convert 4 to <(")>
-      end
-      puts output
-    #end
+    unless reveal
+      # Convert numeric data to visually better map
+      output = output.gsub("0", "XXX") # Convert unknown to ?
+      output = output.gsub("1", " ") # Convert 1 to _
+      output = output.gsub("2", "W") # Convert 2 to W
+      output = output.gsub("3", "F") # Convert 3 to F
+      output = output.gsub("4", '(")') # Convert 4 to <(")>
+    end
+    puts output
   end
 
   # Renders the entire map to the console
@@ -145,6 +143,14 @@ class Map
   # Check that the location is a valid location in the map dimensions
   def valid_location(x, y)
     return (x >= 0) && (x < Settings.get_horizontal_size) && (y >= 0) && (y < Settings.get_vertical_size)
+  end
+
+  def to_string_for_json
+    output = ""
+    @map.each do |column|
+      output += "{" + column.join(",") + "}"
+    end
+    return output
   end
 
   def get_map

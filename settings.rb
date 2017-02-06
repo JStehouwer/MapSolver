@@ -8,6 +8,7 @@ class Settings
     @@vertical_size = 5
     @@random = Random.new
     @@player_file = ""
+    @@player_executable = ""
     @@player_name = ""
     @@test_mode = 0
   end
@@ -18,7 +19,7 @@ class Settings
   end
 
   def parse(arguments)
-    players = ["human", "ai_up", "ai_left", "ai_diag", "ai_dist"]
+    players = ["human", "ai_up", "ai_left", "ai_diag", "ai_dist", "other"]
     set_defaults
     (0..arguments.length).each do |arg|
       case arguments.at(arg)
@@ -29,6 +30,9 @@ class Settings
         output += "  -w <int>: Set horizontal dimension of board to <int>\n"
         output += "  -l <int>: Set vertical dimension of board to <int>\n"
         output += "  -r <int>: Set the RNG seed to <int>\n"
+        output += "  -p <string>: Set the player to <string>\n"
+        output += "  -pe <string>: If using player 'other', <string> must be the executable for the player\n"
+        output += "  -pn <string>: Set the player's name to <string> (Currently not supported)\n"
         puts output
         return false
       when "-v"
@@ -56,6 +60,10 @@ class Settings
       when "-p"
         if arguments.at(arg+1) and players.include?(arguments.at(arg+1))
           @@player_file = arguments.at(arg+1)
+        end
+      when "-pe"
+        if arguments.at(arg+1)
+          @@player_executable = arguments.at(arg+1)
         end
       when "-pn"
         if arguments.at(arg+1)
@@ -93,6 +101,10 @@ class Settings
 
   def self.get_player_file
     @@player_file
+  end
+
+  def self.get_player_executable
+    @@player_executable
   end
 
   def self.get_player_name
